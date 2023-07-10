@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_vs_cubit/business_logic/event.dart';
 import 'package:bloc_vs_cubit/business_logic/repo.dart';
 import 'package:bloc_vs_cubit/business_logic/state.dart';
@@ -12,21 +14,59 @@ EventTransformer<Event> debounce<Event>(Duration duration) {
   return (events, mapper) => events.debounce(duration).switchMap(mapper);
 }
 
-class MyBloc extends Bloc<MyEvent, MySearchState> {
-  MyBloc({required this.repo}) : super(SearchStateInit()) {
-    on<TextChanged>(_onTextChanged, transformer: debounce(_duration));
-  }
+//TODO: uncomment this to use bloc
+
+// class MyBloc extends Bloc<MyEvent, MySearchState> {
+//
+//   final MyRepo repo;
+//
+//   MyBloc({required this.repo}) : super(SearchStateInit()) {
+//     on<TextChanged>(_onTextChanged, transformer: debounce(_duration));
+//   }
+//
+//   void _onTextChanged(TextChanged event, Emitter<MySearchState> emit) async {
+//
+//     final searchTerm = event.text;
+//
+//     if (searchTerm.isEmpty) emit(SearchStateEmpty());
+//
+//     emit(SearchStateLoading());
+//     await repo.fetchData();
+//     emit(SearchStateEmpty());
+//   }
+// }
+
+//TODO: uncomment this to use cubit
+
+class MyCubit extends Cubit<MySearchState> {
 
   final MyRepo repo;
+  final StreamController _textChangedController = StreamController<String>();
 
-  void _onTextChanged(TextChanged event, Emitter<MySearchState> emit) async {
+  MyCubit({required this.repo}) : super(SearchStateInit()){
+    _textChangedController.stream
+        .debounce(_duration)
+        .listen((text) => _emitStateAccordingToTextChanges(text));
+  }
 
-    final searchTerm = event.text;
+  void onTextChanged(String text) {
+    _textChangedController.add(text);
+  }
 
-    if (searchTerm.isEmpty) emit(SearchStateEmpty());
+  void _emitStateAccordingToTextChanges(String text) async {
+    if (text.isEmpty) {
+      emit(SearchStateEmpty());
+      return;
+    }
 
     emit(SearchStateLoading());
     await repo.fetchData();
     emit(SearchStateEmpty());
+  }
+
+  @override
+  Future<void> close() {
+    _textChangedController.close();
+    return super.close();
   }
 }

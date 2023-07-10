@@ -8,19 +8,35 @@ void main() {
   runApp(const MyApp());
 }
 
+//TODO: uncomment this to use bloc
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: BlocProvider(
+//         create: (context) => MyBloc(repo: MyRepo()),
+//         child: const MaterialApp(
+//           home: MyScreen(),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+//TODO: uncomment this to use cubit
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
       home: BlocProvider(
-        create: (context) => MyBloc(repo: MyRepo()),
+        create: (context) => MyCubit(repo: MyRepo()),
         child: const MaterialApp(
           home: MyScreen(),
         ),

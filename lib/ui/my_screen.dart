@@ -11,12 +11,52 @@ class MyScreen extends StatefulWidget {
   State<MyScreen> createState() => _MyScreenState();
 }
 
+//TODO: uncomment this to use bloc
+
+// class _MyScreenState extends State<MyScreen> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return SafeArea(
+//       child: Scaffold(
+//         appBar: AppBar(title: const Text('Search')),
+//         body: Padding(
+//           padding: const EdgeInsets.all(16),
+//           child: Column(
+//             children: [
+//               const MySearchBar(),
+//               Padding(
+//                 padding: const EdgeInsets.all(16),
+//                 child: BlocBuilder<MyBloc, MySearchState>(
+//                   builder: (context, state) {
+//                     if(state is SearchStateLoading){
+//                       return const CircularProgressIndicator();
+//                     }
+//                     else if(state is SearchStateEmpty){
+//                       return const Text('OK');
+//                     }
+//                     else {
+//                       return Container();
+//                     }
+//                   },
+//                 ),
+//               )
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+//TODO: uncomment this to use cubit
+
 class _MyScreenState extends State<MyScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: const Text('Search'),),
+        appBar: AppBar(title: const Text('Search')),
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -24,7 +64,7 @@ class _MyScreenState extends State<MyScreen> {
               const MySearchBar(),
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: BlocBuilder<MyBloc, MySearchState>(
+                child: BlocBuilder<MyCubit, MySearchState>(
                   builder: (context, state) {
                     if(state is SearchStateLoading){
                       return const CircularProgressIndicator();
@@ -45,3 +85,4 @@ class _MyScreenState extends State<MyScreen> {
     );
   }
 }
+

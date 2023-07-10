@@ -10,14 +10,61 @@ class MySearchBar extends StatefulWidget {
   State<MySearchBar> createState() => _MySearchBarState();
 }
 
+//TODO: uncomment this to use bloc
+
+// class _MySearchBarState extends State<MySearchBar> {
+//   final _textController = TextEditingController();
+//   late MyBloc _myBloc;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _myBloc = context.read<MyBloc>();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return TextField(
+//       controller: _textController,
+//       autocorrect: false,
+//       onChanged: (text) {
+//         _myBloc.add(TextChanged(text: text));
+//       },
+//       decoration: InputDecoration(
+//         prefixIcon: const Icon(Icons.search),
+//         suffixIcon: GestureDetector(
+//           onTap: _onClearTapped,
+//           child: const Icon(Icons.clear),
+//         ),
+//         border: const OutlineInputBorder(),
+//         hintText: 'Search...',
+//       ),
+//     );
+//   }
+//
+//   void _onClearTapped() {
+//     _textController.text = '';
+//     _myBloc.add(const TextChanged(text: ''));
+//   }
+//
+//   @override
+//   void dispose() {
+//     _textController.dispose();
+//     super.dispose();
+//   }
+// }
+
+
+//TODO: uncomment this to use cubit
+
 class _MySearchBarState extends State<MySearchBar> {
   final _textController = TextEditingController();
-  late MyBloc _myBloc;
+  late MyCubit _myCubit;
 
   @override
   void initState() {
     super.initState();
-    _myBloc = context.read<MyBloc>();
+    _myCubit = context.read<MyCubit>();
   }
 
   @override
@@ -26,7 +73,7 @@ class _MySearchBarState extends State<MySearchBar> {
       controller: _textController,
       autocorrect: false,
       onChanged: (text) {
-        _myBloc.add(TextChanged(text: text));
+        _myCubit.onTextChanged(text);
       },
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.search),
@@ -42,7 +89,7 @@ class _MySearchBarState extends State<MySearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    _myBloc.add(const TextChanged(text: ''));
+    _myCubit.onTextChanged('');
   }
 
   @override
